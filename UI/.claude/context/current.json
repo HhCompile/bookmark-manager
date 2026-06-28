@@ -1,0 +1,24 @@
+{
+  "project": "/Users/sunxiansheng/Mine/www/bookMark-manager/UI",
+  "lastSession": {
+    "id": "940c2662-7875-4890-b13b-0618aedaf666",
+    "endedAt": "2026-06-18T18:01:12.039Z"
+  },
+  "activeFiles": [
+    "/tmp/bookmark-mcp-server-v4.py",
+    "/tmp/bookmark-skill-v4.md",
+    "/tmp/claude-mcp.json",
+    "/tmp/mcp-deploy-guide.md",
+    "/tmp/pre-tool-bookmark.js",
+    "/tmp/post-tool-bookmark.js",
+    "/tmp/user-prompt-bookmark.js",
+    "/tmp/stop-bookmark.js",
+    "/tmp/precompact-bookmark.js",
+    "/Users/sunxiansheng/.claude/hooks/pre-tool-bookmark.js"
+  ],
+  "recentCommands": [
+    "echo \"=== 推送部署文档到 workspace 仓 ===\"\nB64=$(base64 -i /tmp/mcp-deploy-guide.md | tr -d '\\n')\nSHA=$(g..."
+  ],
+  "knowledge": {},
+  "transcriptSnippet": "mp\":\"2026-06-18T18:00:54.377Z\",\"userType\":\"external\",\"entrypoint\":\"cli\",\"cwd\":\"/Users/sunxiansheng/Mine/www/bookMark-manager/UI\",\"sessionId\":\"940c2662-7875-4890-b13b-0618aedaf666\",\"version\":\"2.1.177\",\"gitBranch\":\"HEAD\",\"slug\":\"gh-github-staged-acorn\"}\n{\"parentUuid\":\"a56f4782-5bdd-4dab-aa9d-234af4eb0ed4\",\"isSidechain\":false,\"type\":\"system\",\"subtype\":\"stop_hook_summary\",\"hookCount\":2,\"hookInfos\":[{\"command\":\"cd /Users/sunxiansheng/Mine/www/PrivShield && cargo fmt 2>/dev/null || true\",\"durationMs\":354},{\"command\":\"node /Users/sunxiansheng/.claude/hooks/stop-bookmark.js\",\"durationMs\":38}],\"hookErrors\":[],\"hookAdditionalContext\":[],\"preventedContinuation\":false,\"stopReason\":\"\",\"hasOutput\":false,\"level\":\"suggestion\",\"timestamp\":\"2026-06-18T18:00:54.768Z\",\"uuid\":\"1db8d56e-8d55-433e-9ceb-cd975546cd61\",\"toolUseID\":\"bee99b46-1dae-47ee-985b-12bb052b8a18\",\"userType\":\"external\",\"entrypoint\":\"cli\",\"cwd\":\"/Users/sunxiansheng/Mine/www/bookMark-manager/UI\",\"sessionId\":\"940c2662-7875-4890-b13b-0618aedaf666\",\"version\":\"2.1.177\",\"gitBranch\":\"HEAD\",\"slug\":\"gh-github-staged-acorn\"}\n{\"parentUuid\":\"1db8d56e-8d55-433e-9ceb-cd975546cd61\",\"isSidechain\":false,\"type\":\"system\",\"subtype\":\"turn_duration\",\"durationMs\":31193,\"messageCount\":1946,\"timestamp\":\"2026-06-18T18:00:54.772Z\",\"uuid\":\"6e4aca4b-e3a7-4f79-896a-eaeac6872fb3\",\"isMeta\":false,\"userType\":\"external\",\"entrypoint\":\"cli\",\"cwd\":\"/Users/sunxiansheng/Mine/www/bookMark-manager/UI\",\"sessionId\":\"940c2662-7875-4890-b13b-0618aedaf666\",\"version\":\"2.1.177\",\"gitBranch\":\"HEAD\",\"slug\":\"gh-github-staged-acorn\"}\n{\"type\":\"last-prompt\",\"lastPrompt\":\"用 bookmark 工具列出我所有书签\",\"leafUuid\":\"6e4aca4b-e3a7-4f79-896a-eaeac6872fb3\",\"sessionId\":\"940c2662-7875-4890-b13b-0618aedaf666\"}\n{\"type\":\"ai-title\",\"aiTitle\":\"查看 gh 登录的 GitHub 信息\",\"sessionId\":\"940c2662-7875-4890-b13b-0618aedaf666\"}\n{\"type\":\"mode\",\"mode\":\"normal\",\"sessionId\":\"940c2662-7875-4890-b13b-0618aedaf666\"}\n{\"type\":\"permission-mode\",\"permissionMode\":\"auto\",\"sessionId\":\"940c2662-7875-4890-b13b-0618aedaf666\"}\n"
+}

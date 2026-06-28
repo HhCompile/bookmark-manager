@@ -1,0 +1,19 @@
+# UI Design Agent 依赖
+
+# MCP 协议支持
+mcp>=1.0.0
+
+# Web 框架（可选，用于 REST API 模式）
+fastapi>=0.104.0
+uvicorn>=0.24.0
+
+# 代码解析
+ast-decompiler>=0.7.0
+
+# 工具库
+pydantic>=2.5.0
+python-dotenv>=1.0.0
+
+# 测试
+pytest>=7.4.0
+pytest-asyncio>=0.21.0

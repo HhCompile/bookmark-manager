@@ -1,0 +1,15 @@
+{
+  "mcpServers": {
+    "bookmark-mcp": {
+      "type": "stdio",
+      "command": "python3",
+      "args": [
+        "/Users/sunxiansheng/Mine/www/bookMark-manager/bookmark-mcp/server-v4.py"
+      ],
+      "env": {
+        "BOOKMARK_API_BASE": "http://localhost:9001/v1",
+        "BOOKMARK_TIMEOUT": "30"
+      }
+    }
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "mcpServers": {
+    "ui-design-agent": {
+      "command": "python3",
+      "args": [
+        "/Users/sunxiansheng/Mine/www/bookmark-manager/ui-design-agent/src/server/mcp_server.py"
+      ],
+      "env": {
+        "PROJECT_ROOT": "/Users/sunxiansheng/Mine/www/bookmark-manager"
+      },
+      "description": "UI Design Agent - 智能 UI 设计助手，支持组件分析、生成和样式修改",
+      "alwaysAllow": [
+        "analyze_component",
+        "generate_component",
+        "modify_style",
+        "list_components",
+        "extract_design_tokens"
+      ]
+    }
+  }
+}

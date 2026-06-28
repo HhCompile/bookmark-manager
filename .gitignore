@@ -1,0 +1,15 @@
+.env
+.env.*
+venv*/
+.venv/
+node_modules/
+__pycache__/
+*.pyc
+*.pyo
+.pytest_cache/
+.playwright-mcp/
+*.log
+.DS_Store
+dist/
+build/
+*.egg-info/
