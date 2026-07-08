@@ -2,12 +2,18 @@
 
 > This file contains project-specific information for AI coding agents working on the Bookmark Manager project. The project contains both a frontend web application and a backend API service.
 
+> ⚠️  **当前阶段（2026-07-08）：V2 已接管后端。**
+> - 默认后端：FastAPI V2 (app_v2/, 端口 9002) — 54 个路由（V2 自带 SQLite，已验证：280 条书签）
+> - 历史后端：Flask V1 (app/, 端口 9001) — 仅作 fallback / 数据迁移底座，默认关闭 (FLASK_ENABLED=false)
+> - 数据存储：SQLite (bookmarks.db, 主) + JSON (bookmarks.json, LEGACY/fallback)
+> - 启动器：python3 start.py (start.sh / start.bat 已停用 Flask 默认分支)
+
 ## Project Overview
 
 Bookmark Manager is a full-stack web application for managing browser bookmarks with AI-powered organization features. The project consists of two main components:
 
 1. **bookmark-manager-web**: React-based frontend web application
-2. **bookmark-manager-admin**: Flask-based backend API service
+2. **bookmark-manager-admin**: FastAPI V2 (Python 3.13, 端口 9002) — Flask V1 留作 fallback / 迁移底座
 
 ### Key Features
 - Bookmark management with multiple view modes (list, card, tree)
@@ -52,12 +58,17 @@ Bookmark Manager is a full-stack web application for managing browser bookmarks 
 
 | Category | Technology | Version |
 |----------|------------|---------|
-| Language | Python | 3.9+ |
-| Web Framework | Flask | 2.3.2 |
-| HTML Parsing | BeautifulSoup4 | 4.12.2 |
-| Data Storage | JSON file | - |
-| CORS | flask-cors | 4.0+ |
-| Rate Limiting | flask-limiter | 3.0+ |
+| Language | Python | 3.13 (venv_new) |
+| Web Framework V2 (当前) | FastAPI + Uvicorn | 0.138 / 0.49 |
+| Web Framework V1 (停启) | Flask | 3.1.3 |
+| HTML Parsing | BeautifulSoup4 + lxml | 4.12.2 / 6.x |
+| Data Storage (主) | SQLite (WAL, bookmarks.db) | - |
+| Data Storage (fallback) | JSON (bookmarks.json) — LEGACY | - |
+| Validation / Settings | Pydantic + pydantic-settings | 2.13 / 2.14 |
+| CORS V2 | starlette middleware | - |
+| CORS V1 (停启) | flask-cors | 6.0 |
+| Rate Limiting V1 (停启) | flask-limiter | 4.1 |
+| HTTP client (MCP / AI) | httpx | 0.28 |
 
 ---
 
@@ -411,14 +422,30 @@ const BookmarkView = lazy(() => import('./pages/bookmark/BookmarkView'));
 
 #### Layered Architecture
 
+#### V2 Architecture (current)
+
+```
+app_v2/main.py          # FastAPI 实例 + lifespan + 路由挂载
+app_v2/routers/         # 13 个 router 模块（bookmarks / tags / auth / ai / sync / metadata / folders / scripts / ...）
+app/db/                 # SQLite schema + 连接
+app/repositories/       # Repository 模式 — V2 router 直接调用，不再走 Storage JSON
+app/auth/               # JWT 鉴权（V2 自带）
+app/importers/          # HTML / Chrome 书签解析
+app/config.py           # Pydantic Settings — V1/V2 共用配置（FLASK_ENABLED / FASTAPI_ENABLED / DATA_BACKEND 等）
+```
+
+V2 路由当前数量：**54 个**（已在 127.0.0.1:9002 验证启动 + openapi.json）。
+
+#### V1 Architecture (legacy — 仅 `DATA_BACKEND=json` 时使用)
+
 | Layer | Directory | Responsibility |
 |-------|-----------|----------------|
-| API Layer | `app/api/` | Handle HTTP requests/responses, define all routes |
-| Controller Layer | `app/controllers/` | Business logic control, coordinate services |
-| Service Layer | `app/services/` | Core business logic implementation |
-| Model Layer | `app/models/` | Data structures and entity definitions |
-| Script Layer | `app/scripts/` | Independent functional scripts |
-| Utility Layer | `app/utils/` | Common utility functions |
+| API Layer | `app/api/` | Flask request handlers (`api_app.py`) |
+| Controller Layer | `app/controllers/` | V1 业务调度 |
+| Service Layer | `app/services/` | 含 legacy `storage_service.py` (JSON)，仅 fallback |
+| Model Layer | `app/models/` | V1 模型 (Bookmark / Folder / Tag / Metadata) |
+| Script Layer | `app/scripts/` | V1 内嵌脚本 |
+| Utility Layer | `app/utils/` | V1 utilities |
 
 #### Core Classes
 
@@ -574,9 +601,15 @@ See `bookmark-manager-admin/.env.example`:
 |----------|---------|-------------|
 | `DEBUG` | True | Debug mode |
 | `HOST` | 0.0.0.0 | Server bind address |
-| `PORT` | 9001 | Server port |
-| `SECRET_KEY` | dev-secret-key | Flask secret key |
-| `DATA_FILE` | bookmarks.json | Data storage file |
+| `PORT` | 9001 | V1 Flask port（V1 默认关闭） |
+| `V2_PORT` | 9002 | V2 FastAPI port（app_v2/main.py 读 os.environ.get） |
+| `FASTAPI_PORT` | 9002 | Settings 类字段（同 V2_PORT 别名） |
+| `FASTAPI_ENABLED` | true | V2 默认开启 |
+| `FLASK_ENABLED` | false | V1 默认关闭（V2 已接管） |
+| `SECRET_KEY` | dev-secret-key | V1 Flask secret key |
+| `DATA_BACKEND` | sqlite | `json` / `sqlite` / `postgres` |
+| `DATA_FILE` | bookmarks.json | LEGACY JSON 路径（仅 DATA_BACKEND=json 时用） |
+| `SQLITE_PATH` | bookmarks.db | V2 SQLite 主存储 |
 | `MAX_BACKUP_COUNT` | 5 | Max backup files |
 | `UPLOAD_FOLDER` | uploads | Upload directory |
 | `MAX_CONTENT_LENGTH` | 16777216 | Max upload size (16MB) |
@@ -584,6 +617,12 @@ See `bookmark-manager-admin/.env.example`:
 | `LOG_FILE` | None | Log file path |
 | `CORS_ORIGINS` | * | Allowed CORS origins |
 | `MAX_BOOKMARKS_PER_BATCH` | 1000 | Batch size limit |
+| `JWT_SECRET` | dev-jwt-secret | V2 JWT 签名密钥 |
+| `JWT_ALGORITHM` | HS256 | V2 JWT 算法 |
+| `JWT_EXPIRE_MINUTES` | 1440 | V2 JWT 过期（默认 24h） |
+| `DEEPSEEK_API_KEY_ENCRYPTED` | - | AI key（加密存储） |
+| `DEEPSEEK_BASE_URL` | https://api.deepseek.com/v1 | DeepSeek endpoint |
+| `DEEPSEEK_MODEL` | deepseek-chat | DeepSeek model |
 
 ---
 
