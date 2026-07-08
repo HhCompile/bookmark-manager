@@ -13,3 +13,6 @@ __pycache__/
 dist/
 build/
 *.egg-info/
+
+# AI agent 工具生成的临时目录（未 tracked）
+.code-review-graph/
