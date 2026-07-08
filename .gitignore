@@ -21,3 +21,10 @@ build/
 .claude/
 .kimi/
 .trae/
+
+# admin filter-repo 备份（不删，仅 hide；push 验证后用户自行 rm -rf）
+.admin_backup*/
+.admin_backup*/
+
+# 通用：来自历史的备份文件
+*.bak
