@@ -16,3 +16,8 @@ build/
 
 # AI agent 工具生成的临时目录（未 tracked）
 .code-review-graph/
+
+# AI agent 工具私货（仅忽略未 tracked 部分）
+.claude/
+.kimi/
+.trae/
